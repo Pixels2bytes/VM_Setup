@@ -9,6 +9,7 @@ The goal is to provide a simple, end-to-end workflow so you can quickly spin up 
 - [Setup SSH Configuration File](#setup-ssh-configuration-file)
 - [Link VSCode to VM](#link-vscode-to-vm)
 - [Run VM](#run-vm)
+- [GPU Setup](#gpu-setup)
 - [[BONUS] Transfer Files From Local Computer to VM](#bonus-transfer-files-from-local-computer-to-vm)
 - [Helpful Links](#helpful-links)
 
@@ -17,6 +18,7 @@ Go to Google Cloud > Select Project Picker (`Left-hand corner next to the GCloud
 ```
 https://console.cloud.google.com/
 ```
+*NOTE* If you’re part of an organization and don’t see your project listed, or you don’t appear linked to any organization, you’ll need to contact your Google Cloud Administrator. Permissions to access projects are managed by the organization. Tthere’s nothing you can do on your own to gain access.
 
 ## Check Credentials
 - Get your username and ensure your role is Editor
@@ -70,6 +72,55 @@ Go to the VM Instances Dashboard > Select the VM
 
 ## Run VM
 - Command Palette > Remote-SSH: Connect to Host... > Select Host Project `project-name-remote-ssh`
+- Select Linux
+- Open folder as your username/home
+
+## GPU Setup
+By default, Google Cloud GPU VMs do **not** come with NVIDIA drivers installed. This means that even if you selected a GPU, frameworks like PyTorch will not detect it until the drivers are installed.
+
+- Inside the VM terminal set to @username/project-gpu-vm, run this to download the gpu installer script:
+```
+curl -L https://storage.googleapis.com/compute-gpu-installation-us/installer/latest/cuda_installer.pyz --output cuda_installer.pyz
+```
+
+- Install NVIDIA driver (Required for Debian-based systems):
+```
+sudo python3 cuda_installer.pyz install_driver --installation-mode=binary
+```
+
+- Install CUDA Toolkit
+```
+sudo python3 cuda_installer.pyz install_cuda
+```
+
+- Reboot
+```
+sudo reboot
+```
+
+- Verify if it worked
+```
+nvidia-smi
+```
+<img src="docs/tuto-setup-gpu-on-vm-instance.png" width-"600">
+
+- Verify in Python
+```
+python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.device_count()); print(torch.cuda.get_device_name(0))"
+```
+Terminal Output:
+```
+True
+1
+GPU Name...
+```
+
+*NOTE* If you get `"bash: python: command not found"`, install Python and Pytorch globablly then reverify in Python:
+```
+sudo apt update
+sudo apt install python3-pip -y
+python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
 
 ## [BONUS] Transfer Files From Local Computer to VM
 Outside of VSCode, open Powershell and type:
@@ -83,4 +134,6 @@ scp -i "C:/Users/Username/Project/Location/Of/StoreKeys/PRIVATE-SSH-FILE-Here-ss
 https://www.youtube.com/watch?v=0Bjx3Ra8PRM
 - *ARTICLE:* Getting Started - First-Time Git Setup: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
 - *ARTICLE:* Boot Disk Storage Increase: https://docs.cloud.google.com/compute/docs/disks/resize-persistent-disk
+- *ARTICLE:* Install GPU Drivers: https://docs.cloud.google.com/compute/docs/gpus/install-drivers-gpu
+- *ARTICLE:* GPU Machine Types: https://docs.cloud.google.com/compute/docs/gpus
 - *ARTICLE:* Kernal Crashes: https://github.com/microsoft/vscode-jupyter/wiki/Kernel-crashes
