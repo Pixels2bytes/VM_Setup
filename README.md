@@ -102,7 +102,7 @@ sudo reboot
 ```
 nvidia-smi
 ```
-<img src="docs/tuto-setup-gpu-on-vm-instance.png" width-"600">
+<img src="docs/tuto-setup-gpu-on-vm-instance.png" width="600">
 
 - Verify in Python
 ```
