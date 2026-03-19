@@ -49,7 +49,7 @@ IdentityFile C:\Users\Username\Desktop\VM_SETUP\storekeys\project-name-remote-ss
 
 - Generate SSH keygen: In VSCode go to Terminal > New Terminal and type:
 
-```ssh-keygen -t rsa -f project-name-remote-ssh -C External.IP.Address -b 2048```
+```ssh-keygen -t rsa -f project-name-remote-ssh -C your_username_from_GC_IAM -b 2048```
 
 *PRESS* Enter, Enter
 
