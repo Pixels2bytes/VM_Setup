@@ -57,6 +57,7 @@ IdentityFile C:\Users\Username\Desktop\VM_SETUP\storekeys\project-name-remote-ss
 
 <img src="docs/tuto-vmkey-setup.png" width ="600">
 
+- Drag and drop the two files into the storekeys folder after they are generated
 - Paste the private file `project-name-remote-ssh` location in SSH Configuration IdentityFile
 - Open the public file `project-name-remote-ssh.pub` and copy the key + username
 
