@@ -1,1 +1,1 @@
-This folder is where ssh keys are stored
+This folder is where ssh keys are stored. Be sure to drag and drop them here after they are generated.
